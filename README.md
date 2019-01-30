@@ -1,3 +1,9 @@
+#TODO
+- 'auto' sized modals
+- positioning for 'auto' modals
+- header / footer
+- esc button
+
 # To run example demo locally -
 npm start
 localhost:3001

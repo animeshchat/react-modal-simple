@@ -1,3 +1,28 @@
-h1 {
-    color: red;
+.modal-container
+{
+  background: #ffffff;
 }
+
+.modal-cross
+{
+  position: absolute;
+  padding: 1.5em;
+  right: 0;
+}
+
+.modal-title
+{
+  position: absolute;
+  left:0;
+  font-weight: 400;
+  padding: 0.8em;
+  font-size: 1.5rem;
+}
+
+// prevents scroll in body when any modal is opened (provided its one modal in page)
+.empty
+{
+  overflow:hidden;
+}
+
+

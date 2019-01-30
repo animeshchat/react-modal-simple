@@ -2,27 +2,38 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import './styles.css'
 
+class Cross extends Component
+{
+  render()
+  {
+    // If required, the svg styles (stroke, height, width) can be exposed as props.
+    return(
+      <svg viewBox="0 0 27 27"  preserveAspectRatio="xMidYMid meet" style={{stroke: '#000000', height: '1.2em', width:'1.2em'}}>
+        <g transform="translate(0,-1026.3622)"><path style={{fill:'none', strokeWidth:'2px',strokeLinecap:'butt',strokeLinejoin:'miter',strokeOpacity:1}} d="m 0.3125,1026.6926 c 25.669643,25.8035 25.669643,25.8035 25.669643,25.8035" /><path style={{fill:'none', strokeWidth:'2px',strokeLinecap:'butt',strokeLinejoin:'miter',strokeOpacity:1}} d="m 0.491071,1052.1836 c 25.401786,-25.491 25.401786,-25.491 25.401786,-25.491"/></g>
+      </svg>
+    )
+  }
+}
+
 export default class Modal extends Component 
 {
   static propTypes =
   {
-    isOpen: PropTypes.bool.isRequired,
-    height: PropTypes.string, // e.g '100%'
-    width: PropTypes.string, // e.g '50%'
-    on_close: PropTypes.func,
-    modalContainerClass: PropTypes.string,
-    modalStyle: PropTypes.object, // dictionary of styles
-    modalClass: PropTypes.string, // name of class for styling modal
-    backdrop_style: PropTypes.object, //dictionary of styles
-    backdrop_class: PropTypes.string, // name of class for styling backdrop
-    no_backdrop: PropTypes.bool, // bool to disable backdrop
+    isOpen: PropTypes.bool.isRequired, // default false.
+    onClose: PropTypes.func.isRequired, 
+    height: PropTypes.string, // Default 'auto'. e.g '100%'. 'auto' takes up the content space.
+    width: PropTypes.string, // Default 'auto' e.g '50%' 'auto' takes up content space.
+    isCloseButton: PropTypes.bool, // default yes
     usefullscreen: PropTypes.number, // ex. 720.. breakpoint below which full screen will be used 
-    fullScreenCloseButton: PropTypes.bool,   // default true
-    nonFullScreenCloseButton: PropTypes.bool,  // default false
-  
-    // cleanup 
-    modalTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),  // only if modalCross is being displayed
-    modalTinyCross: PropTypes.bool, // TODO - hack. Ideally, there should be a way to customize full screen cross and small modal cross.
+   
+    // classes
+    modalClass: PropTypes.string, // name of class for styling modal
+    backdropClass: PropTypes.string, // name of class for styling backdrop
+
+    // styles
+    modalStyle: PropTypes.object, // dictionary of styles
+    backdropStyles: PropTypes.object, //dictionary of styles
+    modalCrossStyles: PropTypes.object, // dict of styles
   }
 
   constructor(props)
@@ -30,16 +41,6 @@ export default class Modal extends Component
     super(props)
   }
   
-  componentWillMount()
-  {
-  }
-   
-  // add class to body when modal is open (to prevent scroll). can be separated out as component (http://jaketrent.com/post/update-body-class-react/)
-  //
-  // NOTE - this approach doesn't work if multiple modals can be opened on the page. Example product page. One true is overriden by other falses. 
-  componentDidMount()
-  {
-  }
   componentWillReceiveProps(nextProps)
   {
     if(nextProps.isOpen != this.props.isOpen)
@@ -47,7 +48,6 @@ export default class Modal extends Component
       if (nextProps.isOpen == true)
       {
         document.body.classList.add('empty') 
-        
           
         // Before 2/9/2017
         // Both cross and back defaults to the same behavior to close modal - 1. pop browser history, 2. remove hash 3. call callback (which changes state and sets isModalOpen state to false, whicih causes modal to close)
@@ -78,15 +78,12 @@ export default class Modal extends Component
 
   render()
   {
-    
     if(this.props.isOpen == false)
       return null
    
-    if (typeof(window) == 'undefined')
+    if(typeof(window) == 'undefined')
       return
    
-    let closeButton = false
-
     /* MODAL STYLES */
     /* default modal style*/
     let modalStyle = 
@@ -108,16 +105,14 @@ export default class Modal extends Component
         modalStyle.transform = null
         modalStyle.WebkitTransform = null
         modalStyle.msTransform = null
-    
-        closeButton = this.props.fullScreenCloseButton == false ? false : true 
     }
     else
     {
-      let modalHeight = this.props.height || '50%'
-      let modalWidth = this.props.width || '50%'
+      let modalHeight = this.props.height || 'auto'
+      let modalWidth = this.props.width || 'auto'
 
-      let heightAdj = (100 - modalHeight.split('%')[0])/2 + '%' 
-      let widthAdj = (100 - modalWidth.split('%')[0])/2 + '%' 
+      let heightAdj = this.props.height ? (100 - modalHeight.split('%')[0])/2 + '%' : 'auto'
+      let widthAdj = this.props.width ? (100 - modalWidth.split('%')[0])/2 + '%' : 'auto'
 
       modalStyle.height = modalHeight 
       modalStyle.width = modalWidth
@@ -130,13 +125,11 @@ export default class Modal extends Component
         ...modalStyle,
         ...this.props.modalStyle
       }
-      
-      closeButton = this.props.nonFullScreenCloseButton == true ? true : false
     }
     
     /* BACKDROP STYLES */
     /* default backdrop styles */
-    let backdrop_style =
+    let backdropStyles =
     {
       position: 'fixed',
       width: '100%',
@@ -150,40 +143,28 @@ export default class Modal extends Component
     }
 
     /* handle other backdrop styles */
-    if (this.props.backdrop_style) {
-      for (let key in this.props.backdrop_style) {
-        backdrop_style[key] = this.props.backdrop_style[key]
+    if (this.props.backdropStyles) {
+      for (let key in this.props.backdropStyles) {
+        backdropStyles[key] = this.props.backdropStyles[key]
       }
     }
    
-    // TODO:closeButton logic is mucked up. Cleanup closebutton/title logic for both fullscrn and non full screen 
     const markup =
     (
-      <div className={this.props.modalContainerClass}>
+      <div>
         <div className={this.props.modalClass || "modal-container"} style={modalStyle}>
           {
-            closeButton == true ? (     
+            this.props.isCloseButton == true ? (     
               <div style={{marginBottom: '4em'}}>
-                {
-                  this.props.modalTitle ? (
-                   <div className="modal-title">
-                    {this.props.modalTitle}
-                   </div>
-                  ):null
-                }
-                <div onClick={()=>this.handleCloseClick()} className={this.props.modalTinyCross == true ? "modal-cross-small" : "modal-cross-full"}>
-                  <SvgIcon name="close" size={1.3} style={{stroke:'#333'}} />
+                <div onClick={()=>this.handleCloseClick()} className={"modal-cross"} style={this.props.modalCrossStyles}>
+                  <Cross />
                 </div>
               </div>
             ):null
           }
           {this.props.children} 
         </div>
-        {
-          !this.props.no_backdrop && 
-          <div className={this.props.backdrop_class} style={backdrop_style} onClick={(e) => this.closePreventDefault(e)}>
-          </div>
-        }
+        <div className={this.props.backdropClass} style={backdropStyles} onClick={(e) => this.closePreventDefault(e)}></div>
       </div>
     )
     return markup
@@ -197,8 +178,8 @@ export default class Modal extends Component
 
   close()
   {
-    if(this.props.on_close) 
-      this.props.on_close()
+    if(this.props.onClose) 
+      this.props.onClose()
   }
 
   // for default close button click
@@ -219,4 +200,10 @@ export function invokeCloseModal()
 {
   if(window.location.hash != '')
     window.history.back()
+}
+
+Modal.defaultProps = 
+{
+  isOpen: false,
+  isCloseButton: true,
 }
