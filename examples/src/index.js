@@ -1,9 +1,9 @@
 import React from 'react';
 import { render} from 'react-dom';
-import MyComponent from '../../src';
+import Modal from '../../src';
 
 const App = () => (
-      <MyComponent />
+      <Modal />
 );
 
 render(<App />, document.getElementById("root"));
