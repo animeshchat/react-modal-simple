@@ -1,6 +1,6 @@
 {
   "name": "react-modal-simple",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "Simple react modal component.",
   "main": "dist/index.js",
   "scripts": {
