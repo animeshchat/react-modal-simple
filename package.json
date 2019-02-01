@@ -1,12 +1,12 @@
 {
   "name": "react-modal-simple",
-  "version": "0.0.53",
+  "version": "0.0.55",
   "description": "Simple react modal component.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",
-    "transpile": "babel src -d dist --copy-files & postcss 'src/styles.css' -d dist --ext css",
+    "transpile": "babel src -d dist --copy-files",
     "prepublishOnly": "npm run transpile",
     "build": "webpack --mode production",
     "deploy": "gh-pages -d examples/dist",
@@ -19,7 +19,6 @@
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.7",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
@@ -29,11 +28,6 @@
     "css-loader": "^2.1.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "postcss": "^7.0.14",
-    "postcss-cli": "^6.1.1",
-    "postcss-import": "^12.0.1",
-    "postcss-loader": "^3.0.0",
-    "precss": "^4.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

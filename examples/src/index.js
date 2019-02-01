@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render} from 'react-dom'
 import Modal from '../../src'
+import '../../src/styles.css'
 
 class App extends Component
 {
