@@ -1,6 +1,16 @@
+# To use component
+'''
+npm install --save react-modal-simple
+
+import Modal from 'react-modal-simple'
+import 'react-modal-simple/dist/styles.css'
+'''
+
+
 # To run example demo locally -
 npm start
 localhost:3001
+
 
 # To build and deply demo
 1. To build dist of demo - npm run build
@@ -8,8 +18,10 @@ localhost:3001
 OR
 npm run publish-demo (combines above steps)
 
+
 # To publish again
 Whenever you are ready to publish a new version, simply increment the version in package.json, and then run npm publish and npm run publish-demo
+
 
 # Resources
 Step by step instruction to publish component to npm from scratch
