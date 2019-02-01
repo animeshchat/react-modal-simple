@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
-import './styles.css'
-
 class Cross extends Component
 {
   render()
@@ -80,10 +78,10 @@ export default class Modal extends Component
   render()
   {
     if(this.props.isOpen == false)
-      return null
+      return(<div></div>) 
    
     if(typeof(window) == 'undefined')
-      return
+      return(<div></div>)
    
     /* MODAL STYLES */
     /* default modal style*/
