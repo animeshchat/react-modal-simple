@@ -24,6 +24,7 @@ export default class Modal extends Component
     width: PropTypes.string, // Default 'auto' e.g '50%' 'auto' takes up content space.
     isCloseButton: PropTypes.bool, // default yes
     usefullscreen: PropTypes.number, // ex. 720.. breakpoint below which full screen will be used 
+    isBackdrop: PropTypes.bool, // default true
    
     // classes
     modalClass: PropTypes.string, // name of class for styling modal
@@ -147,9 +148,11 @@ export default class Modal extends Component
         backdropStyles[key] = this.props.backdropStyles[key]
       }
     }
-   
-    const markup =
-    (
+    // if isBackdrop is false
+    if(this.props.isBackdrop == false)
+      backdropStyles['background'] = 'transparent'
+
+    return(
       <div>
         <div className={this.props.modalClass || "modal-container"} style={modalStyle}>
           {
@@ -166,7 +169,6 @@ export default class Modal extends Component
         <div className={this.props.backdropClass} style={backdropStyles} onClick={(e) => this.closePreventDefault(e)}></div>
       </div>
     )
-    return markup
   }
   
   closePreventDefault(e)

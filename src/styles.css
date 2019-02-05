@@ -19,7 +19,6 @@
   font-size: 1.5rem;
 }
 
-// prevents scroll in body when any modal is opened (provided its one modal in page)
 .empty
 {
   overflow:hidden;
