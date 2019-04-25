@@ -148,9 +148,6 @@ export default class Modal extends Component
         backdropStyles[key] = this.props.backdropStyles[key]
       }
     }
-    // if isBackdrop is false
-    if(this.props.isBackdrop == false)
-      backdropStyles['background'] = 'transparent'
 
     return(
       <div>
@@ -166,7 +163,11 @@ export default class Modal extends Component
           }
           {this.props.children} 
         </div>
-        <div className={this.props.backdropClass} style={backdropStyles} onClick={(e) => this.closePreventDefault(e)}></div>
+        {
+          this.props.isBackdrop == false ? null : (
+            <div className={this.props.backdropClass} style={backdropStyles} onClick={(e) => this.closePreventDefault(e)}></div>
+          )
+        }
       </div>
     )
   }
